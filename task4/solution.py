@@ -22,8 +22,7 @@ class TicTacToeBoard:
     O_SIGN = 'O'
     EMPTY_SIGN = ' '
     STATUS_DRAW = 'Draw!'
-    STATUS_X_WINS = 'X wins!'
-    STATUS_O_WINS = 'O wins!'
+    STATUS_WIN = '{} wins!'
     STATUS_GAME_IN_PROGRESS = 'Game in progress.'
     VALID_COORDINATE = r'^[ABC][123]$'
     VALID_SIGN = r'^[' + X_SIGN + O_SIGN + r']$'
@@ -38,6 +37,7 @@ class TicTacToeBoard:
             self._board[row] = [self.EMPTY_SIGN] * 3
         self._last_played = None
         self._status = self.STATUS_GAME_IN_PROGRESS
+        self._moves_count = 0
 
     @staticmethod
     def _get_board_coords(key):
@@ -78,6 +78,49 @@ class TicTacToeBoard:
         self._last_played = value
         row, col = self._get_board_coords(key)
         self._board[row][col] = value
+        self._moves_count += 1
+
+        if (self._status == self.STATUS_GAME_IN_PROGRESS and
+                self._move_wins(row, col, value)):
+            self._status = self.STATUS_WIN.format(value)
+
+        if (self._moves_count == 9 and
+                self._status == self.STATUS_GAME_IN_PROGRESS):
+            self._status = self.STATUS_DRAW
+
+    def _move_wins(self, row, col, value):
+        if all(map(lambda x: x == value, self._get_row(row))):
+            return True
+        if all(map(lambda x: x == value, self._get_col(col))):
+            return True
+
+        if (row == col and
+                all(map(lambda x: x == value, self._get_diagonal(True)))):
+            return True
+
+        if (row == 2 - col and
+                all(map(lambda x: x == value, self._get_diagonal(False)))):
+            return True
+
+        return False
+
+    def _get_row(self, row_num):
+        return self._board[row_num]
+
+    def _get_col(self, col_num):
+        return [row[col_num] for row in self._board]
+
+    def _get_diagonal(self, main_diagonal=True):
+        diagonal = []
+        for row in range(3):
+            if main_diagonal:
+                diagonal += self._board[row][row]
+            else:
+                diagonal += self._board[row][2 - row]
+        return diagonal
+
+    def game_status(self):
+        return self._status
 
     def __str__(self):
         result = '\n'
@@ -88,49 +131,3 @@ class TicTacToeBoard:
         result += self.LINE
         result += self.END_ROW
         return result
-
-    @staticmethod
-    def _list_wins(list_):
-        win_list_x = [TicTacToeBoard.X_SIGN] * 3
-        win_list_o = [TicTacToeBoard.O_SIGN] * 3
-
-        if list_ == win_list_x:
-            return TicTacToeBoard.STATUS_X_WINS
-        elif list_ == win_list_o:
-            return TicTacToeBoard.STATUS_O_WINS
-
-    def game_status(self):
-        if self._status != self.STATUS_GAME_IN_PROGRESS:
-            return self._status
-
-        for row in self._board:
-            win_test = self._list_wins(row)
-            if win_test is not None:
-                self._status = win_test
-                return win_test
-
-        cols = [[row[col] for row in self._board] for col in range(3)]
-
-        for col in cols:
-            win_test = self._list_wins(col)
-            if win_test is not None:
-                self._status = win_test
-                return win_test
-
-        diagonals = [[], []]
-        for row in range(3):
-            diagonals[0] += self._board[row][row]
-            diagonals[1] += self._board[row][2 - row]
-
-        for diagonal in diagonals:
-            win_test = self._list_wins(diagonal)
-            if win_test is not None:
-                self._status = win_test
-                return win_test
-
-        for row in self._board:
-            if self.EMPTY_SIGN in row:
-                return self.STATUS_GAME_IN_PROGRESS
-
-        self._status = self.STATUS_DRAW
-        return self.STATUS_DRAW
