@@ -1,13 +1,21 @@
-﻿def what_is_my_sign(day, month):
-    signs = ["Овен", "Телец", "Близнаци", "Рак", "Лъв", "Дева", "Везни",
-             "Скорпион", "Стрелец", "Козирог", "Водолей", "Риби"]
+﻿SIGNS = (
+    ("Водолей", 20),
+    ("Риби", 19),
+    ("Овен", 21),
+    ("Телец", 21),
+    ("Близнаци", 21),
+    ("Рак", 21),
+    ("Лъв", 22),
+    ("Дева", 23),
+    ("Везни", 23),
+    ("Скорпион", 23),
+    ("Стрелец", 22),
+    ("Козирог", 22)
+)
 
-    start_days = [21, 21, 21, 21, 22, 23, 23, 23, 22, 22, 20, 19]
 
-    month_offset = 3
-    sign_index = month - month_offset
-
-    if day < start_days[sign_index]:
-        return signs[sign_index - 1]
+def what_is_my_sign(day, month):
+    if day >= SIGNS[month - 1][1]:
+        return SIGNS[month - 1][0]
     else:
-        return signs[sign_index]
+        return SIGNS[month - 2][0]
