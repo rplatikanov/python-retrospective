@@ -18,15 +18,7 @@ def iterate(func):
 
 
 def zip_with(func, *iterables):
-    if len(iterables) == 0:
-        return
-    iterators = [iter(i) for i in iterables]
-    while True:
-        params = [next(it) for it in iterators]
-        if len(params) != len(iterables):
-            break
-        else:
-            yield func(*params)
+    return map(lambda zipped: func(*zipped), zip(*iterables))
 
 
 class CachedFunc:
