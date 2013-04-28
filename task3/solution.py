@@ -15,10 +15,15 @@
 
     def children(self, gender=None):
         children = self.children_set
+        result = []
+
         if gender is not None:
-            return [child for child in children if child.gender == gender]
+            result = [child for child in children if child.gender == gender]
         else:
-            return list(children)
+            result = list(children)
+
+        result.sort(key=lambda child: child.birth_year)
+        return result
 
     def get_siblings(self, gender=None):
         siblings = set()
