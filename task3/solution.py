@@ -5,16 +5,16 @@
         self.gender = gender
         self.father = father
         self.mother = mother
-        self.children_set = set()
+        self._children = set()
 
         if self.father is not None:
-            self.father.children_set.add(self)
+            self.father._children.add(self)
 
         if self.mother is not None:
-            self.mother.children_set.add(self)
+            self.mother._children.add(self)
 
     def children(self, gender=None):
-        children = self.children_set
+        children = self._children
         result = []
 
         if gender is not None:
@@ -25,7 +25,7 @@
         result.sort(key=lambda child: child.birth_year)
         return result
 
-    def get_siblings(self, gender=None):
+    def _get_siblings(self, gender=None):
         siblings = set()
         if self.father is not None:
             siblings.update(self.father.children(gender))
@@ -39,10 +39,10 @@
         return list(siblings)
 
     def get_brothers(self):
-        return self.get_siblings(gender='M')
+        return self._get_siblings(gender='M')
 
     def get_sisters(self):
-        return self.get_siblings(gender='F')
+        return self._get_siblings(gender='F')
 
     def is_direct_successor(self, person):
-        return person in self.children_set
+        return person in self._children
