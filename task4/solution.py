@@ -39,9 +39,10 @@ class TicTacToeBoard:
         self._last_played = None
         self._status = self.STATUS_GAME_IN_PROGRESS
 
-    def _get_board_coords(self, key):
+    @staticmethod
+    def _get_board_coords(key):
         row = 3 - int(key[1])
-        col = self.COLUMNS[key[0]]
+        col = TicTacToeBoard.COLUMNS[key[0]]
         return row, col
 
     def __getitem__(self, key):
@@ -88,14 +89,15 @@ class TicTacToeBoard:
         result += self.END_ROW
         return result
 
-    def _list_wins(self, list_):
-        win_list_x = [self.X_SIGN] * 3
-        win_list_o = [self.O_SIGN] * 3
+    @staticmethod
+    def _list_wins(list_):
+        win_list_x = [TicTacToeBoard.X_SIGN] * 3
+        win_list_o = [TicTacToeBoard.O_SIGN] * 3
 
         if list_ == win_list_x:
-            return self.STATUS_X_WINS
+            return TicTacToeBoard.STATUS_X_WINS
         elif list_ == win_list_o:
-            return self.STATUS_O_WINS
+            return TicTacToeBoard.STATUS_O_WINS
 
     def game_status(self):
         if self._status != self.STATUS_GAME_IN_PROGRESS:
