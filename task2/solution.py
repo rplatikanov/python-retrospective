@@ -6,11 +6,10 @@ def groupby(func, seq):
     return {k: [x for x in seq if func(x) == k] for k in keys}
 
 
-def compose(func1, func2):
-    return lambda *args, **kwargs: func1(func2(*args, **kwargs))
-
-
 def iterate(func):
+    def compose(func1, func2):
+        return lambda arg: func1(func2(arg))
+
     f = lambda x: x
     yield f
     while True:
