@@ -1,4 +1,4 @@
-﻿from collections import deque
+﻿from collections import OrderedDict
 
 
 def groupby(func, seq):
@@ -27,21 +27,18 @@ class CachedFunc:
     def __init__(self, func, cache_size):
         self.func = func
         self.cache_size = cache_size
-        self.queue = deque()
-        self.cache = dict()
+        self.cache = OrderedDict()
 
     def __call__(self, *args):
         arg_key = tuple(args)
         if arg_key in self.cache:
             return self.cache[arg_key]
 
-        if len(self.queue) == self.cache_size:
-            key = self.queue.pop()
-            del self.cache[key]
+        if len(self.cache) == self.cache_size:
+            self.cache.popitem(False)
 
         result = self.func(*args)
         self.cache[arg_key] = result
-        self.queue.appendleft(arg_key)
         return result
 
 
