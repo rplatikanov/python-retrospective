@@ -2,19 +2,21 @@
 
 
 def groupby(func, seq):
-    keys = {func(i) for i in seq}
-    return {k: [x for x in seq if func(x) == k] for k in keys}
+    keys = {func(element) for element in seq}
+    return {key: [element
+                  for element in seq
+                  if func(element) == key]
+            for key in keys}
 
 
 def iterate(func):
     def compose(func1, func2):
         return lambda arg: func1(func2(arg))
 
-    f = lambda x: x
-    yield f
+    composed = lambda x: x
     while True:
-        f = compose(f, func)
-        yield f
+        yield composed
+        composed = compose(composed, func)
 
 
 def zip_with(func, *iterables):
