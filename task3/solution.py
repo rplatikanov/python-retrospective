@@ -45,4 +45,4 @@
         return self.get_siblings(gender='F')
 
     def is_direct_successor(self, person):
-        return person.father is self or person.mother is self
+        return person in self.children_set
