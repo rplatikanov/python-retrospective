@@ -30,18 +30,19 @@ class TicTacToeBoard:
     ROW = '{} | {} | {} | {} |\n'
     END_ROW = '    A   B   C  \n'
     COLUMNS = {'A': 0, 'B': 1, 'C': 2}
+    BOARD_SIZE = 3
 
     def __init__(self):
-        self._board = [None] * 3
-        for row in range(3):
-            self._board[row] = [self.EMPTY_SIGN] * 3
+        self._board = [None] * self.BOARD_SIZE
+        for row in range(self.BOARD_SIZE):
+            self._board[row] = [self.EMPTY_SIGN] * self.BOARD_SIZE
         self._last_played = None
         self._status = self.STATUS_GAME_IN_PROGRESS
         self._moves_count = 0
 
     @staticmethod
     def _get_board_coords(key):
-        row = 3 - int(key[1])
+        row = TicTacToeBoard.BOARD_SIZE - int(key[1])
         col = TicTacToeBoard.COLUMNS[key[0]]
         return row, col
 
@@ -84,7 +85,7 @@ class TicTacToeBoard:
                 self._move_wins(row, col, value)):
             self._status = self.STATUS_WIN.format(value)
 
-        if (self._moves_count == 9 and
+        if (self._moves_count == self.BOARD_SIZE ** 2 and
                 self._status == self.STATUS_GAME_IN_PROGRESS):
             self._status = self.STATUS_DRAW
 
@@ -98,7 +99,7 @@ class TicTacToeBoard:
                 all(map(lambda x: x == value, self._get_diagonal(True)))):
             return True
 
-        if (row == 2 - col and
+        if (row == self.BOARD_SIZE - 1 - col and
                 all(map(lambda x: x == value, self._get_diagonal(False)))):
             return True
 
@@ -112,11 +113,11 @@ class TicTacToeBoard:
 
     def _get_diagonal(self, main_diagonal=True):
         diagonal = []
-        for row in range(3):
+        for row in range(self.BOARD_SIZE):
             if main_diagonal:
                 diagonal += self._board[row][row]
             else:
-                diagonal += self._board[row][2 - row]
+                diagonal += self._board[row][self.BOARD_SIZE - 1 - row]
         return diagonal
 
     def game_status(self):
@@ -124,9 +125,9 @@ class TicTacToeBoard:
 
     def __str__(self):
         result = '\n'
-        for row in range(3):
+        for row in range(self.BOARD_SIZE):
             result += self.LINE
-            result += self.ROW.format(3 - row, *self._board[row])
+            result += self.ROW.format(self.BOARD_SIZE - row, *self._board[row])
 
         result += self.LINE
         result += self.END_ROW
