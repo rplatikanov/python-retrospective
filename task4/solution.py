@@ -69,7 +69,8 @@ class TicTacToeBoard:
         if not matched_value:
             raise InvalidValue
 
-        if self._last_played is not None and self._last_played == value:
+        if (self._last_played is not None
+                and self._last_played == value):
             raise NotYourTurn
 
         if self[key] != self.EMPTY_SIGN:
@@ -95,11 +96,13 @@ class TicTacToeBoard:
             return True
 
         if (row_num == col_num and
-                all(map(lambda x: x == value, self._get_diagonal(True)))):
+                all(map(lambda x: x == value,
+                        self._get_diagonal(True)))):
             return True
 
         if (row_num == self.BOARD_SIZE - 1 - col_num and
-                all(map(lambda x: x == value, self._get_diagonal(False)))):
+                all(map(lambda x: x == value,
+                        self._get_diagonal(False)))):
             return True
 
         return False
@@ -125,7 +128,9 @@ class TicTacToeBoard:
         result = '\n'
         for row in range(self.BOARD_SIZE):
             result += self.LINE
-            result += self.ROW.format(self.BOARD_SIZE - row, *self._board[row])
+            result += self.ROW.format(
+                self.BOARD_SIZE - row, *self._board[row]
+            )
 
         result += self.LINE
         result += self.END_ROW
