@@ -41,6 +41,7 @@ class TicTacToeBoard:
 
     @staticmethod
     def _get_board_coords(key):
+        """Parses the coordinates from string to tuple (row_num, col_num)"""
         row_num = TicTacToeBoard.BOARD_SIZE - int(key[1])
         col_num = TicTacToeBoard.COLUMNS[key[0]]
         return row_num, col_num
@@ -90,6 +91,7 @@ class TicTacToeBoard:
             self._status = self.STATUS_DRAW
 
     def _move_wins(self, row_num, col_num, value):
+        """Checks if the given move is a winning move."""
         if all(map(lambda x: x == value, self._get_row(row_num))):
             return True
         if all(map(lambda x: x == value, self._get_col(col_num))):
@@ -108,12 +110,15 @@ class TicTacToeBoard:
         return False
 
     def _get_row(self, row_num):
+        """Returns the board row with the specified index"""
         return self._board[row_num]
 
     def _get_col(self, col_num):
+        """Returns the board column with the specified index"""
         return [row[col_num] for row in self._board]
 
     def _get_diagonal(self, main_diagonal=True):
+        """Returns one of the board diagonals"""
         if main_diagonal:
             return [self._board[row_num][row_num]
                     for row_num in range(self.BOARD_SIZE)]

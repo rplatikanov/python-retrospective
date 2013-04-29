@@ -26,6 +26,9 @@
         return result
 
     def _get_siblings(self, gender=None):
+        """Returns all the siblings of the person or only the
+        brothers/sisters if a gender argument is passed."""
+
         siblings = set()
         if self.father is not None:
             siblings.update(self.father.children(gender))
