@@ -33,9 +33,8 @@ class TicTacToeBoard:
     BOARD_SIZE = 3
 
     def __init__(self):
-        self._board = [None] * self.BOARD_SIZE
-        for row in range(self.BOARD_SIZE):
-            self._board[row] = [self.EMPTY_SIGN] * self.BOARD_SIZE
+        self._board = [[self.EMPTY_SIGN] * self.BOARD_SIZE
+                       for row_num in range(self.BOARD_SIZE)]
         self._last_played = None
         self._status = self.STATUS_GAME_IN_PROGRESS
         self._moves_count = 0
@@ -112,13 +111,12 @@ class TicTacToeBoard:
         return [row[col_num] for row in self._board]
 
     def _get_diagonal(self, main_diagonal=True):
-        diagonal = []
-        for row in range(self.BOARD_SIZE):
-            if main_diagonal:
-                diagonal += self._board[row][row]
-            else:
-                diagonal += self._board[row][self.BOARD_SIZE - 1 - row]
-        return diagonal
+        if main_diagonal:
+            return [self._board[row_num][row_num]
+                    for row_num in range(self.BOARD_SIZE)]
+        else:
+            return [self._board[row_num][self.BOARD_SIZE - 1 - row_num]
+                    for row_num in range(self.BOARD_SIZE)]
 
     def game_status(self):
         return self._status
