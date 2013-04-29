@@ -41,9 +41,9 @@ class TicTacToeBoard:
 
     @staticmethod
     def _get_board_coords(key):
-        row = TicTacToeBoard.BOARD_SIZE - int(key[1])
-        col = TicTacToeBoard.COLUMNS[key[0]]
-        return row, col
+        row_num = TicTacToeBoard.BOARD_SIZE - int(key[1])
+        col_num = TicTacToeBoard.COLUMNS[key[0]]
+        return row_num, col_num
 
     def __getitem__(self, key):
         if not isinstance(key, str):
@@ -53,8 +53,8 @@ class TicTacToeBoard:
         if not matched_key:
             raise InvalidKey
 
-        row, col = self._get_board_coords(key)
-        return self._board[row][col]
+        row_num, col_num = self._get_board_coords(key)
+        return self._board[row_num][col_num]
 
     def __setitem__(self, key, value):
         if not isinstance(key, str):
@@ -76,29 +76,29 @@ class TicTacToeBoard:
             raise InvalidMove
 
         self._last_played = value
-        row, col = self._get_board_coords(key)
-        self._board[row][col] = value
+        row_num, col_num = self._get_board_coords(key)
+        self._board[row_num][col_num] = value
         self._moves_count += 1
 
         if (self._status == self.STATUS_GAME_IN_PROGRESS and
-                self._move_wins(row, col, value)):
+                self._move_wins(row_num, col_num, value)):
             self._status = self.STATUS_WIN.format(value)
 
         if (self._moves_count == self.BOARD_SIZE ** 2 and
                 self._status == self.STATUS_GAME_IN_PROGRESS):
             self._status = self.STATUS_DRAW
 
-    def _move_wins(self, row, col, value):
-        if all(map(lambda x: x == value, self._get_row(row))):
+    def _move_wins(self, row_num, col_num, value):
+        if all(map(lambda x: x == value, self._get_row(row_num))):
             return True
-        if all(map(lambda x: x == value, self._get_col(col))):
+        if all(map(lambda x: x == value, self._get_col(col_num))):
             return True
 
-        if (row == col and
+        if (row_num == col_num and
                 all(map(lambda x: x == value, self._get_diagonal(True)))):
             return True
 
-        if (row == self.BOARD_SIZE - 1 - col and
+        if (row_num == self.BOARD_SIZE - 1 - col_num and
                 all(map(lambda x: x == value, self._get_diagonal(False)))):
             return True
 
